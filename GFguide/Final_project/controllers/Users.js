@@ -1,7 +1,11 @@
 import Users from '../model/UsersModel.js';
+// import Products from '../model/ProductsModel.js';
+// import Pictures from '../model/PicturesModel.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import jwt_decode from 'jwt-decode'
+import jwt_decode from 'jwt-decode';
+
+
 
 export const getUsers = async(req,res)=>{
     try{
@@ -15,6 +19,20 @@ export const getUsers = async(req,res)=>{
 
     }
 }
+
+// export const getProducts = async(req,res)=>{
+//     try{
+//         const products = await Products.findAll({
+//             attributes:['name', 'main_picture_id', 'ingredient_picture_id']
+//         });
+//         res.json(products)
+//     }catch(e) {
+//         console.log(e);
+//         res.status(404).json({msg:'not found'})
+
+//     }
+// }
+
 
 export const register = async(req,res) =>{
     const {email, password} = req.body;

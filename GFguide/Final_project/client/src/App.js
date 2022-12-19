@@ -1,24 +1,36 @@
-import logo from './logo.svg';
+import {useState,createContext} from 'react';
+import LoginRegisterForm from './components/LoginRegisterForm';
+import Home from './components/Home';
+import Nav from './components/Nav';
+import Products from './components/Products';
+import Information from './components/Information';
+import {Routes, Route, BrowserRouter} from 'react-router-dom';
 import './App.css';
+import {Auth} from './auth/Auth';
+
+
+export const AppContext = createContext(null);
+
 
 function App() {
+  const [token, setToken] = useState('')
   return (
+    <BrowserRouter>
+    <AppContext.Provider value={{token,setToken}}>
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <Nav/>
+        <Routes>
+        <Route path='/' element={<Home/>}/>
+          <Route path='/login' element={<LoginRegisterForm title='Login'/>}/>
+          <Route path='/register' element={<LoginRegisterForm title='Register'/>}/>
+          <Route path='/products' element={<Products/>}/>
+          <Route path='/info' element={<Auth><Information/></Auth>}/>
+        </Routes>
+    
+      
     </div>
+    </AppContext.Provider>
+    </BrowserRouter>
   );
 }
 
