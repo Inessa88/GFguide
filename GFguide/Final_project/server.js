@@ -16,18 +16,20 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(router);
 
-app.listen(process.env.PORT||8080, ()=>{
-    console.log(`run on ${process.env.PORT||8080}`);
+// app.listen(process.env.PORT||8080, ()=>{
+//     console.log(`run on ${process.env.PORT||8080}`);
+// })
+app.listen(3001, ()=>{
+  console.log(`run on ${3001}`);
 })
 
-
-try{
-    await db.authenticate();
-    console.log('Database connected');
-}
-catch(e){
-    console.log(e);
-}
+// try{
+//     await db.authenticate();
+//     console.log('Database connected');
+// }
+// catch(e){
+//     console.log(e);
+// }
 
 
 app.get('/products',(req,res)=>{
@@ -39,6 +41,21 @@ app.get('/products',(req,res)=>{
   .then(rows=>{
       res.json(rows);
     })
+    .catch(err=>{
+      console.log(err);
+    })
+  })
+
+  app.post('/products',(req,res)=>{
+    let {name, category, filename} = req.body
+    let picture_id = 1
+    db2('pictures').insert({'url': filename}).returning('id')//to check after what we added 
+    .then((data) => {
+      db2('products').insert({'name': name, 'category_id': Number(category), 'main_picture_id': data[0].id})
+      .then(rows=>{
+          res.json(rows);
+        })
+    })    
     .catch(err=>{
       console.log(err);
     })

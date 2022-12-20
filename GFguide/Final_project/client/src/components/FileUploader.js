@@ -1,15 +1,14 @@
 import React, {useRef} from 'react'
 
-const FileUploader = ({props}) => {
+const FileUploader = (props) => {
     const fileInput = useRef(null)
 
     const handleFileInput = (e) => {
         // handle validations
         const file = e.target.files[0];
-        if (file.size > 1024)
-          props.Error({ error: "File size cannot exceed more than 1MB" });
-        else props.Success(file);
-      };
+        if (file.size > 10000000) {  
+          props.Error({ error: "File size cannot exceed more than 1MB" });}
+        else { props.Success({file});} };
 
     return (
         <div className="file-uploader">

@@ -8,7 +8,7 @@ import axios from 'axios';
 const Products = (props) =>{
     const[products, setProducts] = useState([]);
     const [name, setName] = useState("");
-    const [category, setCategory] = useState("");
+    const [category, setCategory] = useState("1");
     const [selectedFile, setSelectedFile] = useState(null);
 
 
@@ -33,13 +33,18 @@ const Products = (props) =>{
 
 
     const submitForm = () => {
-        const formData = new FormData();
-        formData.append("name", name);
-        formData.append("category", category);
-        formData.append("file", selectedFile);
+        // storeToPublicFolder(selectedFile);
+        let data = {
+            "name": name,
+            "category": category,
+            "filename": selectedFile.name,
+        }
       
-        axios
-          .post('localhost:3001/products', formData)
+        axios({
+            method: "post",
+            url: "/products",
+            data: data,
+          })
           .then((res) => {
             alert("File Upload success");
           })
@@ -56,7 +61,7 @@ const Products = (props) =>{
                 return(
                     <div key ={item.id}>
                         <p>{item.name}</p>
-                        <img src= {item.url} alt="product photo"/>
+                        <img src= {item.url} alt="product photo" style={{width:'200px'}}/>
                         
 
                     </div>
@@ -73,17 +78,18 @@ const Products = (props) =>{
 
 
             <select name='categoryId' value={category} onChange={(e)=>setCategory(e.target.value)}>
-                <option value='cookies'>Cookies</option>
-                <option value='pasta'>Pasta</option>
+                <option value='1'>Pasta</option>
+                <option value='2'>Cookies</option>
+                
             </select>
-            <FileUploader
-                Success={(file) => setSelectedFile(file)}
+            <FileUploader test={'5'}
+                Success={({ file }) => setSelectedFile(file)}
                 Error={({ error }) => alert(error)}
             />
-            <FileUploader
+            {/* <FileUploader
                 Success={(file) => setSelectedFile(file)}
                 Error={({ error }) => alert(error)}
-            />
+            /> */}
             <button onClick={submitForm}>Submit</button>
         </form>
 
