@@ -28,6 +28,7 @@ const Nav = (props) => {
             <Button component={Link} to='/'>Home</Button>
             <Button component={Link} to='/info'>Information</Button>
             <Button component={Link} to='/products'>Products</Button>
+            <Button component={Link} to='/upload'>Add product</Button>
             <Button component={Link} to='/login'>Login</Button>
             <Button component={Link} to='/register'>Register</Button>
             <Button onClick={logout}>Logout</Button>

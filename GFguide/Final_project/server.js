@@ -1,11 +1,18 @@
 import express from 'express';
+import multer from 'multer';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import db from './config/db.js';
 import router from './routes/Users.js'
 import db2 from './config/db2.js';
+import path from 'path';
+import {fileURLToPath} from 'url';
+import { on } from 'events';
 
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 const app = express();
@@ -15,6 +22,22 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(router);
+// app.use(express.static('public'))
+app.use(express.static(__dirname));
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, path.join(__dirname, '/client/public/'));
+  },
+  filename: (req, file, cb) => {
+      // cb(null, Date.now() + '-' + file.originalname)
+      cb(null, file.originalname)
+  }
+});
+
+const upload = multer({storage}).single('file');
+
 
 // app.listen(process.env.PORT||8080, ()=>{
 //     console.log(`run on ${process.env.PORT||8080}`);
@@ -33,7 +56,7 @@ app.listen(3001, ()=>{
 
 
 app.get('/products',(req,res)=>{
-    db2('products')
+  db2('products')
     
   .select('name', 'url')
   .from('products')
@@ -46,17 +69,62 @@ app.get('/products',(req,res)=>{
     })
   })
 
-  app.post('/products',(req,res)=>{
-    let {name, category, filename} = req.body
-    let picture_id = 1
-    db2('pictures').insert({'url': filename}).returning('id')//to check after what we added 
-    .then((data) => {
-      db2('products').insert({'name': name, 'category_id': Number(category), 'main_picture_id': data[0].id})
-      .then(rows=>{
-          res.json(rows);
+  // app.post('/products',(req,res)=>{
+  //   let {name, category, filename} = req.body
+  //   db2('pictures').insert({'url': filename}).returning('id')//to check after what we added 
+  //   .then((data) => {
+  //     db2('products').insert({'name': name, 'category_id': Number(category), 'main_picture_id': data[0].id})
+  //     .then(rows=>{
+  //         res.json(rows);
+  //       })
+  //   })    
+  //   .catch(err=>{
+  //     console.log(err);
+  //   })
+  // })
+
+
+  app.post('/upload', (req, res) => {
+    upload(req, res, (err) => {
+        if (err) {
+            return res.status(500).json(err)
+        }
+
+        // return res.status(200).send(req.file)
+        let filename = req.file.originalname
+        let {name, category} = req.body
+        db2('pictures').insert({'url': filename}).returning('id')//to check after what we added 
+        .then((data) => {
+          db2('products').insert({'name': name, 'category_id': Number(category), 'main_picture_id': data[0].id, 'post_date': new Date().toISOString().split('T')[0]})
+          .then(rows=>{
+              res.json(rows);
+            })
+        })    
+        .catch(err=>{
+          console.log(err);
         })
-    })    
-    .catch(err=>{
-      console.log(err);
     })
+
+});
+
+
+app.get('/search',(req,res)=>{
+  const {q} = req.query; 
+  db2('products')
+  .select('name','url')
+  .join('pictures', 'pictures.id', '=', 'products.main_picture_id')
+  .whereILike('products.name',`${q}%`)
+  .then(rows=>{
+      if(rows.length ===0){
+          return res.status(404).json({msg:'not found'})
+      }
+      console.log(rows);
+      res.json(rows)
   })
+  .catch(e=>{
+      console.log(e);
+      res.status(404).json({msg:e.message})
+  })
+})
+
+

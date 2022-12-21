@@ -59,7 +59,7 @@ const LoginRegisterForm = (props) =>{
             <div>
                 <h3>{props.title} Form</h3>
             </div>
-            <Box component={'form'} sx={{m:1}} noValidate autocomplete={'off'}>
+            <Box component={'form'} sx={{m:1}} noValidate autoComplete={'off'}>
                 <TextField
                 sx={{m:1}}
                 id='email'

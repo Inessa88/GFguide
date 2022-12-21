@@ -1,15 +1,16 @@
 import {useState, useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
-import FileUploader from './FileUploader'
 import axios from 'axios';
+
 
 
 const Products = (props) =>{
     const[products, setProducts] = useState([]);
-    const [name, setName] = useState("");
-    const [category, setCategory] = useState("1");
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [searchProduct, setSearchProduct] = useState([]);
+    const [productName, setProductName] = useState('');
+    // const [category, setCategory] = useState("1");
+    // const [selectedFile, setSelectedFile] = useState(null);
 
 
     const navigate = useNavigate()
@@ -32,32 +33,53 @@ const Products = (props) =>{
     })
 
 
-    const submitForm = () => {
-        // storeToPublicFolder(selectedFile);
-        let data = {
-            "name": name,
-            "category": category,
-            "filename": selectedFile.name,
-        }
-      
-        axios({
-            method: "post",
-            url: "/products",
-            data: data,
+    const handleSearch = (e) => {
+        setProductName(e.target.value);
+        console.log(productName);
+      }
+    
+    const searchGFProduct = (e) => {
+        e.preventDefault()
+        fetch(`/search?q=${productName}`)
+          .then(res => res.json())
+          .then(data => {
+            setSearchProduct(data)
+            console.log(searchProduct);
           })
-          .then((res) => {
-            alert("File Upload success");
+          .catch(e=>{
+            console.log(e);
           })
-          .catch((err) => alert("File Upload Error"));
-      };
+      }
+
+
 
     if(products.length === 0) return null
 
     return(
         <>
         <div>
-            {
-            products ? products.map(item=>{
+            Search: <input type='text' name='search' onChange={handleSearch}/>
+            <button onClick={searchGFProduct}>Search</button>
+          </div>
+        <div>
+
+        {
+            searchProduct ? searchProduct.map(item=>{
+                return(
+                    <div key ={item.id}>
+                        <p>{item.name}</p>
+                        <img src= {item.url} alt="gf product" style={{width:'200px'}}/>
+                        
+
+                    </div>
+                )
+            }) : ''
+
+            }
+            <div className="list">
+
+                {
+            (searchProduct.length ===0 && products) ? products.map(item=>{
                 return(
                     <div key ={item.id}>
                         <p>{item.name}</p>
@@ -66,32 +88,14 @@ const Products = (props) =>{
 
                     </div>
                 )
-            }) : 'Unauthorized'
+            }) : ''
 
             }
+            </div>
+            
 
         </div>
 
-        <form>
-            Product Name: <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
-            <h4>Select category of the product</h4>
-
-
-            <select name='categoryId' value={category} onChange={(e)=>setCategory(e.target.value)}>
-                <option value='1'>Pasta</option>
-                <option value='2'>Cookies</option>
-                
-            </select>
-            <FileUploader test={'5'}
-                Success={({ file }) => setSelectedFile(file)}
-                Error={({ error }) => alert(error)}
-            />
-            {/* <FileUploader
-                Success={(file) => setSelectedFile(file)}
-                Error={({ error }) => alert(error)}
-            /> */}
-            <button onClick={submitForm}>Submit</button>
-        </form>
 
 
         </>
