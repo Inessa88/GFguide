@@ -60,6 +60,7 @@ app.get('/products',(req,res)=>{
     
   .select('name', 'url')
   .from('products')
+  .orderBy ('products.post_date', 'desc') 
   .join('pictures', 'products.main_picture_id', '=', 'pictures.id')
   .then(rows=>{
       res.json(rows);
@@ -67,6 +68,20 @@ app.get('/products',(req,res)=>{
     .catch(err=>{
       console.log(err);
     })
+  })
+
+
+  app.get('/categories',(req,res)=>{
+    db2('category')
+    
+  .select('id','name')
+  .from('category')
+  .then(rows=>{
+      res.json(rows);
+    })
+    .catch(err=>{
+      console.log(err);
+        })
   })
 
   // app.post('/products',(req,res)=>{
@@ -114,6 +129,26 @@ app.get('/search',(req,res)=>{
   .select('name','url')
   .join('pictures', 'pictures.id', '=', 'products.main_picture_id')
   .whereILike('products.name',`${q}%`)
+  .then(rows=>{
+      if(rows.length ===0){
+          return res.status(404).json({msg:'not found'})
+      }
+      console.log(rows);
+      res.json(rows)
+  })
+  .catch(e=>{
+      console.log(e);
+      res.status(404).json({msg:e.message})
+  })
+})
+
+app.get('/search/category',(req,res)=>{
+  const {q} = req.query; 
+  db2('products')
+  .select('products.name','pictures.url', 'category.name')
+  .join('pictures', 'pictures.id', '=', 'products.main_picture_id')
+  .join('category', 'category.id', '=', 'products.category_id')
+  .where('category.id',q)
   .then(rows=>{
       if(rows.length ===0){
           return res.status(404).json({msg:'not found'})

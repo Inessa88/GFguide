@@ -1,4 +1,5 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useContext} from 'react';
+import {AppContext} from '../App'
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import axios from 'axios';
@@ -9,7 +10,10 @@ const Products = (props) =>{
     const[products, setProducts] = useState([]);
     const [searchProduct, setSearchProduct] = useState([]);
     const [productName, setProductName] = useState('');
-    // const [category, setCategory] = useState("1");
+    const [category, setCategory] = useState('');
+    const [searchCategory, setSearchCategory] = useState([]);
+
+    const {categoryList, setCategoryList} = useContext(AppContext);
     // const [selectedFile, setSelectedFile] = useState(null);
 
 
@@ -32,6 +36,25 @@ const Products = (props) =>{
         },[])
     })
 
+    // useEffect(()=>{
+    //     fetch('/categories')
+    //     .then(res => {
+    //         if (res.status===200){
+    //             return res.json()
+    //         }else{
+    //             throw new Error ("failed status")
+    //             // navigate('/login')
+    //         }
+    //     })
+    //     .then(data =>{
+    //         setCategoryList(data)
+    //     })
+    //     .catch(e=>{
+    //         console.log(e);
+    //     },[])
+    // })
+
+
 
     const handleSearch = (e) => {
         setProductName(e.target.value);
@@ -51,6 +74,19 @@ const Products = (props) =>{
           })
       }
 
+      const searchGFCategory = (e) => {
+        e.preventDefault()
+        fetch(`/search/category?q=${category}`)
+          .then(res => res.json())
+          .then(data => {
+            setSearchCategory(data)
+            console.log(searchCategory);
+          })
+          .catch(e=>{
+            console.log(e);
+          })
+      }
+
 
 
     if(products.length === 0) return null
@@ -60,26 +96,60 @@ const Products = (props) =>{
         <div>
             Search: <input type='text' name='search' onChange={handleSearch}/>
             <button onClick={searchGFProduct}>Search</button>
-          </div>
+        </div>
         <div>
+            Search by category: <select name='categoryId' value={category} onChange={(e)=>setCategory(e.target.value)}>
+            {
+                
+                categoryList ? categoryList.map(item=>{
+                        return(
+                            <option value={item.id}>{item.name}</option>)
+                        
+                    }) : ''
+            }
+                
+            </select>
+            <button onClick={searchGFCategory}>Search</button>
+        </div>
 
-        {
-            searchProduct ? searchProduct.map(item=>{
+
+        
+
+
+        <div>
+            <div>
+                {
+                searchProduct ? searchProduct.map(item=>{
+                    return(
+                        <div key ={item.id}>
+                            <p>{item.name}</p>
+                            <img src= {item.url} alt="gf product" style={{width:'200px'}}/>
+                            
+
+                        </div>
+                )
+            }) : ''
+
+            }
+            </div>
+
+            <div className="list">
+            {
+            searchCategory ? searchCategory.map(item=>{
                 return(
                     <div key ={item.id}>
                         <p>{item.name}</p>
                         <img src= {item.url} alt="gf product" style={{width:'200px'}}/>
-                        
-
                     </div>
                 )
             }) : ''
 
             }
+            </div>
             <div className="list">
 
                 {
-            (searchProduct.length ===0 && products) ? products.map(item=>{
+            (searchProduct.length ===0 && searchCategory.length ===0 && products) ? products.map(item=>{
                 return(
                     <div key ={item.id}>
                         <p>{item.name}</p>

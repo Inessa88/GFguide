@@ -1,4 +1,6 @@
-import {useState} from 'react'
+import {useState, useEffect, useContext} from 'react';
+import {AppContext} from '../App'
+import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import FileUploader from './FileUploader'
 import axios from 'axios';
@@ -11,6 +13,29 @@ const AddProductForm = (props) =>{
     const [name, setName] = useState("");
     const [category, setCategory] = useState("1");
     const [selectedFile, setSelectedFile] = useState(null);
+    // const [categoryList, setCategoryList] = useState([]);
+
+    const {categoryList, setCategoryList} = useContext(AppContext);
+    
+    const navigate = useNavigate();
+
+        useEffect(()=>{
+            fetch('/categories')
+            .then(res => {
+                if (res.status===200){
+                    return res.json()
+                }else{
+                    throw new Error ("failed status")
+                    // navigate('/login')
+                }
+            })
+            .then(data =>{
+                setCategoryList(data)
+            })
+            .catch(e=>{
+                console.log(e);
+            },[])
+        })
 
     const submitForm = (e) => {
         // e.preventDefault();
@@ -41,9 +66,23 @@ const AddProductForm = (props) =>{
             <h4>Select category of the product</h4>
 
 
-            <select name='categoryId' value={category} onChange={(e)=>setCategory(e.target.value)}>
+            {/* <select name='categoryId' value={category} onChange={(e)=>setCategory(e.target.value)}>
                 <option value='6'>Pasta</option>
                 <option value='7'>Cookies</option>
+                
+            </select> */}
+
+
+
+             <select name='categoryId' value={category} onChange={(e)=>setCategory(e.target.value)}>
+            {
+                
+                categoryList ? categoryList.map(item=>{
+                        return(
+                            <option value={item.id}>{item.name}</option>)
+                        
+                    }) : ''
+            }
                 
             </select>
             <FileUploader 
