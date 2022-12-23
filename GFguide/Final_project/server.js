@@ -70,6 +70,19 @@ app.get('/products',(req,res)=>{
     })
   })
 
+  app.get('/map',(req,res)=>{
+    db2('restaurants')
+      
+    .select('name', 'address', 'lat', 'lng')
+    .from('restaurants')
+    .then(rows=>{
+        res.json(rows);
+      })
+      .catch(err=>{
+        console.log(err);
+      })
+    })
+
 
   app.get('/categories',(req,res)=>{
     db2('category')
