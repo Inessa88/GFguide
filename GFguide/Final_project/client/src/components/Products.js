@@ -3,6 +3,11 @@ import {AppContext} from '../App'
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import axios from 'axios';
+import { TextField } from '@mui/material';
+import { IconButton } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { Select } from '@mui/material';
+import { FormControl, InputLabel, OutlinedInput, MenuItem } from '@mui/material';
 
 
 
@@ -36,6 +41,24 @@ const Products = (props) =>{
         },[])
     })
 
+
+    useEffect(()=>{
+        fetch('/categories')
+        .then(res => {
+            if (res.status===200){
+                return res.json()
+            }else{
+                throw new Error ("failed status")
+                // navigate('/login')
+            }
+        })
+        .then(data =>{
+            setCategoryList(data)
+        })
+        .catch(e=>{
+            console.log(e);
+        },[])
+    })
     // useEffect(()=>{
     //     fetch('/categories')
     //     .then(res => {
@@ -94,10 +117,46 @@ const Products = (props) =>{
     return(
         <>
         <div>
-            Search: <input type='text' name='search' onChange={handleSearch}/>
-            <button onClick={searchGFProduct}>Search</button>
+            <TextField id="outlined-basic" label="Product" name='search' variant="outlined" onChange={handleSearch}></TextField>
+            <IconButton aria-label="search" variant="contained" size="large" onClick={searchGFProduct}>
+                <SearchIcon />
+            </IconButton>
+            
         </div>
         <div>
+        {/* <FormControl sx={{ m: 1, width: 300 }}>
+            <InputLabel id="demo-multiple-name-label">Category</InputLabel>
+                <Select
+                    labelId="demo-multiple-name-label"
+                    id="demo-multiple-name"
+                    multiple
+                    name='categoryId'
+                    value={categoryList}
+                    onChange={(e)=>setCategory(e.target.value)}
+                    input={<OutlinedInput label="Category" />}
+                    MenuProps={MenuProps}
+        
+                >
+                {
+                        
+                        categoryList ? categoryList.map(item=>{
+                                return(
+                                    <MenuItem value={item.id}>{item.name}</MenuItem>)
+                                
+                            }) : ''
+                    }
+
+                
+            </Select>
+        </FormControl>
+        <div>
+      
+    </div>
+            <IconButton aria-label="search" variant="contained" size="large" onClick={searchGFCategory}>
+                <SearchIcon />
+            </IconButton> */}
+
+
             Search by category: <select name='categoryId' value={category} onChange={(e)=>setCategory(e.target.value)}>
             {
                 
@@ -109,7 +168,12 @@ const Products = (props) =>{
             }
                 
             </select>
-            <button onClick={searchGFCategory}>Search</button>
+            <IconButton aria-label="search" variant="contained" size="large" onClick={searchGFCategory}>
+                <SearchIcon />
+            </IconButton>
+            
+
+
         </div>
 
 

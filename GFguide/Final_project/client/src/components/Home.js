@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import jwt_decode from 'jwt-decode';
 import {Navigate, useNavigate} from 'react-router-dom';
 import { AppContext } from "../App";
+import Information from './Information';
 
 const Home = (props) => {
     const {token, setToken} = useContext(AppContext);
@@ -26,7 +27,9 @@ const Home = (props) => {
     },[token])
     return(
         <div>
-            <h1>Home</h1>
+            <Information/>
+
+
         </div>
     )
 }

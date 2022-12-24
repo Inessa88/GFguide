@@ -31,7 +31,8 @@ function App() {
           <Route path='/products' element={<Products/>}/>
           <Route path='/upload' element={<AddProductForm/>}/>
           <Route path='/map' element={<GFMap/>}/>
-          <Route path='/info' element={<Auth><Information/></Auth>}/>
+          <Route path='/info' element={<Information/>}/>
+          {/* <Route path='/info' element={<Auth><Information/></Auth>}/> */}
         </Routes>
     
       

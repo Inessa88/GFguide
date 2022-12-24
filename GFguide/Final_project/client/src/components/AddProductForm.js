@@ -6,7 +6,8 @@ import FileUploader from './FileUploader'
 import axios from 'axios';
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {toast} from 'react-toastify'
+import {toast} from 'react-toastify';
+import { TextField } from '@mui/material';
 
 
 const AddProductForm = (props) =>{
@@ -62,18 +63,9 @@ const AddProductForm = (props) =>{
     return(
         <>
         <form encType="multipart/form-data">
-            Product Name: <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
+        <TextField id="outlined-basic" label="Product Name" value={name} variant="outlined" onChange={(e) => setName(e.target.value)}></TextField>
+            {/* Product Name: <input type="text" value={name} onChange={(e) => setName(e.target.value)}/> */}
             <h4>Select category of the product</h4>
-
-
-            {/* <select name='categoryId' value={category} onChange={(e)=>setCategory(e.target.value)}>
-                <option value='6'>Pasta</option>
-                <option value='7'>Cookies</option>
-                
-            </select> */}
-
-
-
              <select name='categoryId' value={category} onChange={(e)=>setCategory(e.target.value)}>
             {
                 
