@@ -8,21 +8,21 @@ import { IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Select } from '@mui/material';
 import { FormControl, InputLabel, OutlinedInput, MenuItem } from '@mui/material';
-
+// import './Products.css';
 
 
 const Products = (props) =>{
     const[products, setProducts] = useState([]);
     const [searchProduct, setSearchProduct] = useState([]);
     const [productName, setProductName] = useState('');
-    const [category, setCategory] = useState('');
+    const [category, setCategory] = useState([]);
     const [searchCategory, setSearchCategory] = useState([]);
+    const [msg, setMsg] = useState('')
 
     const {categoryList, setCategoryList} = useContext(AppContext);
-    // const [selectedFile, setSelectedFile] = useState(null);
-
 
     const navigate = useNavigate()
+
 
     useEffect(()=>{
         fetch('/products')
@@ -35,11 +35,12 @@ const Products = (props) =>{
         })
         .then(data =>{
             setProducts(data)
+            console.log(data)
         })
         .catch(e=>{
             console.log(e);
-        },[])
-    })
+        })
+    },[])
 
 
     useEffect(()=>{
@@ -57,42 +58,31 @@ const Products = (props) =>{
         })
         .catch(e=>{
             console.log(e);
-        },[])
-    })
-    // useEffect(()=>{
-    //     fetch('/categories')
-    //     .then(res => {
-    //         if (res.status===200){
-    //             return res.json()
-    //         }else{
-    //             throw new Error ("failed status")
-    //             // navigate('/login')
-    //         }
-    //     })
-    //     .then(data =>{
-    //         setCategoryList(data)
-    //     })
-    //     .catch(e=>{
-    //         console.log(e);
-    //     },[])
-    // })
+        })
+    },[])
+
+
 
 
 
     const handleSearch = (e) => {
         setProductName(e.target.value);
-        console.log(productName);
-      }
-    
+    }
+
+
     const searchGFProduct = (e) => {
         e.preventDefault()
         fetch(`/search?q=${productName}`)
           .then(res => res.json())
           .then(data => {
+            // if(data.length ===0){
+            //     return res.status(404).json({msg:'not found'})
+            // }
             setSearchProduct(data)
             console.log(searchProduct);
           })
           .catch(e=>{
+            setMsg(e.res.data.msg)
             console.log(e);
           })
       }
@@ -102,10 +92,17 @@ const Products = (props) =>{
         fetch(`/search/category?q=${category}`)
           .then(res => res.json())
           .then(data => {
-            setSearchCategory(data)
-            console.log(searchCategory);
+            if ('msg' in data) {
+                setMsg(data.msg)
+            } else {
+                setSearchCategory(data)
+                // setCategory([])
+                console.log(data);
+            }
+
           })
           .catch(e=>{
+            // setMsg(e.res.data.msg)
             console.log(e);
           })
       }
@@ -131,10 +128,10 @@ const Products = (props) =>{
                     id="demo-multiple-name"
                     multiple
                     name='categoryId'
-                    value={categoryList}
+                    value={category}
                     onChange={(e)=>setCategory(e.target.value)}
                     input={<OutlinedInput label="Category" />}
-                    MenuProps={MenuProps}
+                    
         
                 >
                 {
@@ -143,21 +140,22 @@ const Products = (props) =>{
                                 return(
                                     <MenuItem value={item.id}>{item.name}</MenuItem>)
                                 
-                            }) : ''
+                            }) : {msg}
                     }
 
                 
-            </Select>
+                </Select>
         </FormControl>
-        <div>
+        <IconButton aria-label="search" variant="contained" size="large" onClick={searchGFCategory}>
+            <SearchIcon />
+        </IconButton> */}
+        </div>
       
-    </div>
-            <IconButton aria-label="search" variant="contained" size="large" onClick={searchGFCategory}>
-                <SearchIcon />
-            </IconButton> */}
+    <div>
 
 
-            Search by category: <select name='categoryId' value={category} onChange={(e)=>setCategory(e.target.value)}>
+
+            <select name='categoryId' value={category} onChange={(e)=>setCategory(e.target.value)}>
             {
                 
                 categoryList ? categoryList.map(item=>{
@@ -199,7 +197,7 @@ const Products = (props) =>{
 
             <div className="list">
             {
-            searchCategory ? searchCategory.map(item=>{
+            searchCategory.length!==0 ? searchCategory.map(item=>{
                 return(
                     <div key ={item.id}>
                         <p>{item.name}</p>
@@ -217,7 +215,7 @@ const Products = (props) =>{
                 return(
                     <div key ={item.id}>
                         <p>{item.name}</p>
-                        <img src= {item.url} alt="product photo" style={{width:'200px'}}/>
+                        <img src= {item.url} alt="product photo" style={{height:'240px'}}/>
                         
 
                     </div>

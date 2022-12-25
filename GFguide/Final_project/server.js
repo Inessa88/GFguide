@@ -97,21 +97,6 @@ app.get('/products',(req,res)=>{
         })
   })
 
-  // app.post('/products',(req,res)=>{
-  //   let {name, category, filename} = req.body
-  //   db2('pictures').insert({'url': filename}).returning('id')//to check after what we added 
-  //   .then((data) => {
-  //     db2('products').insert({'name': name, 'category_id': Number(category), 'main_picture_id': data[0].id})
-  //     .then(rows=>{
-  //         res.json(rows);
-  //       })
-  //   })    
-  //   .catch(err=>{
-  //     console.log(err);
-  //   })
-  // })
-
-
   app.post('/upload', (req, res) => {
     upload(req, res, (err) => {
         if (err) {
@@ -155,6 +140,7 @@ app.get('/search',(req,res)=>{
   })
 })
 
+
 app.get('/search/category',(req,res)=>{
   const {q} = req.query; 
   db2('products')
@@ -174,5 +160,45 @@ app.get('/search/category',(req,res)=>{
       res.status(404).json({msg:e.message})
   })
 })
+// app.get('/search/category',(req,res)=>{
+
+//   let {q} = req.query;
+//   if (q) {
+//     q = q.split(',');
+//     db2('products')
+//     .select('products.name','pictures.url', 'category.name')
+//     .join('pictures', 'pictures.id', '=', 'products.main_picture_id')
+//     .join('category', 'category.id', '=', 'products.category_id')
+//     .whereIn('category.id', q)
+//     .then(rows=>{
+//         if(rows.length ===0){
+//             return res.json({msg:'not found'})
+//         }
+//         console.log(rows);
+//         res.json(rows)
+//     })
+//     .catch(e=>{
+//         console.log(e);
+//         res.status(404).json({msg:e.message})
+//     })
+//   } else {
+//     db2('products')
+//     .select('products.name','pictures.url', 'category.name')
+//     .join('pictures', 'pictures.id', '=', 'products.main_picture_id')
+//     .join('category', 'category.id', '=', 'products.category_id')
+//     .then(rows=>{
+//         if(rows.length ===0){
+//             return res.json({msg:'not found'})
+//         }
+//         console.log(rows);
+//         res.json(rows)
+//     })
+//     .catch(e=>{
+//         console.log(e);
+//         res.status(404).json({msg:e.message})
+//     })
+//   }
+
+// })
 
 

@@ -14,8 +14,6 @@ const AddProductForm = (props) =>{
     const [name, setName] = useState("");
     const [category, setCategory] = useState("1");
     const [selectedFile, setSelectedFile] = useState(null);
-    // const [categoryList, setCategoryList] = useState([]);
-
     const {categoryList, setCategoryList} = useContext(AppContext);
     
     const navigate = useNavigate();
@@ -32,11 +30,12 @@ const AddProductForm = (props) =>{
             })
             .then(data =>{
                 setCategoryList(data)
+                
             })
             .catch(e=>{
                 console.log(e);
-            },[])
-        })
+            })
+        },[])
 
     const submitForm = (e) => {
         // e.preventDefault();
