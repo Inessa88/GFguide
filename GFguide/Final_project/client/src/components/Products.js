@@ -8,14 +8,14 @@ import { IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Select } from '@mui/material';
 import { FormControl, InputLabel, OutlinedInput, MenuItem } from '@mui/material';
-// import './Products.css';
+
 
 
 const Products = (props) =>{
     const[products, setProducts] = useState([]);
     const [searchProduct, setSearchProduct] = useState([]);
     const [productName, setProductName] = useState('');
-    const [category, setCategory] = useState([]);
+    const [category, setCategory] = useState('');
     const [searchCategory, setSearchCategory] = useState([]);
     const [msg, setMsg] = useState('')
 
@@ -61,10 +61,6 @@ const Products = (props) =>{
         })
     },[])
 
-
-
-
-
     const handleSearch = (e) => {
         setProductName(e.target.value);
     }
@@ -108,14 +104,25 @@ const Products = (props) =>{
       }
 
 
+      const mystyle = {
+        width: '12.5vw',
+        height: '6vh',
+        borderRadius: '5px',
+        border: '1px solid gray',
+        backgroundColor: 'transparent',
+        color: '#5A5A5A',
+        fontSize: '16px',
+        paddingLeft: '10px',
+        marginTop: '2vh'
+      };
 
     if(products.length === 0) return null
 
     return(
         <>
         <div>
-            <TextField id="outlined-basic" label="Product" name='search' variant="outlined" onChange={handleSearch}></TextField>
-            <IconButton aria-label="search" variant="contained" size="large" onClick={searchGFProduct}>
+            <TextField style={{marginTop: '5vh'}} id="outlined-basic" label="Product" name='search' variant="outlined" onChange={handleSearch}></TextField>
+            <IconButton style={{marginTop: '5vh'}} aria-label="search" variant="contained" size="large" onClick={searchGFProduct}>
                 <SearchIcon />
             </IconButton>
             
@@ -155,7 +162,7 @@ const Products = (props) =>{
 
 
 
-            <select name='categoryId' value={category} onChange={(e)=>setCategory(e.target.value)}>
+            <select style={mystyle} name='categoryId' value={category} onChange={(e)=>setCategory(e.target.value)}>
             {
                 
                 categoryList ? categoryList.map(item=>{

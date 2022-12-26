@@ -59,13 +59,39 @@ const AddProductForm = (props) =>{
           .catch((err) => toast.error('Upload Error'));
       };
 
+
+
+      const mystyle = {
+        width: '12.5vw',
+        height: '6vh',
+        borderRadius: '5px',
+        border: '1px solid gray',
+        backgroundColor: 'transparent',
+        color: '#5A5A5A',
+        fontSize: '16px',
+        paddingLeft: '10px',
+        marginTop: '0',
+        marginBottom: '5vh'
+      };
+
+      const buttonstyle = {
+        width: '8vw',
+        height: '6vh',
+        borderRadius: '5px',
+        border: '1px solid gray',
+        backgroundColor: 'transparent',
+        color: '#5A5A5A',
+        fontSize: '16px',
+        marginTop: '4vh',
+        marginBottom: '8vh'
+      };
     return(
         <>
         <form encType="multipart/form-data">
-        <TextField id="outlined-basic" label="Product Name" value={name} variant="outlined" onChange={(e) => setName(e.target.value)}></TextField>
+        <TextField style={{marginTop: '5vh'}} id="outlined-basic" label="Product Name" value={name} variant="outlined" onChange={(e) => setName(e.target.value)}></TextField>
             {/* Product Name: <input type="text" value={name} onChange={(e) => setName(e.target.value)}/> */}
-            <h4>Select category of the product</h4>
-             <select name='categoryId' value={category} onChange={(e)=>setCategory(e.target.value)}>
+            <h4 style={{margin:'5vh'}}>Select category of the product</h4>
+             <select style={mystyle} name='categoryId' value={category} onChange={(e)=>setCategory(e.target.value)}>
             {
                 
                 categoryList ? categoryList.map(item=>{
@@ -82,7 +108,7 @@ const AddProductForm = (props) =>{
             />
             <ToastContainer/>
             
-            <button onClick={submitForm}>Submit</button>
+            <button style={buttonstyle} onClick={submitForm}>Submit</button>
         </form>
 
 

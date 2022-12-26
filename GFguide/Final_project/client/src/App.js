@@ -5,6 +5,7 @@ import Nav from './components/Nav';
 import Products from './components/Products';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import GFMap from './components/GFMap';
+import Footer from './components/Footer';
 import AddProductForm from './components/AddProductForm';
 import Information from './components/Information';
 import {Routes, Route, BrowserRouter} from 'react-router-dom';
@@ -34,7 +35,7 @@ function App() {
           <Route path='/info' element={<Information/>}/>
           {/* <Route path='/info' element={<Auth><Information/></Auth>}/> */}
         </Routes>
-    
+        <Footer/>
       
     </div>
     </AppContext.Provider>

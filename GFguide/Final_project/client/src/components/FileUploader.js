@@ -1,5 +1,6 @@
 
-import React, {useRef} from 'react'
+import React, {useRef} from 'react';
+import './FileUploader.css';
 
 
 const FileUploader = (props) => {
@@ -13,8 +14,9 @@ const FileUploader = (props) => {
         else { props.Success({file});} };
 
     return (
-        <div className="file-uploader">
-            <input type="file" onChange={handleFileInput}/>
+        <div className="form-group files" >
+            <h4>Upload Your File </h4>
+            <input type="file" class="form-control" multiple="" onChange={handleFileInput}/>
             {/* <button onClick={e => fileInput.current && fileInput.current.click()} className="btn btn-primary">Add</button> */}
         </div>
     )

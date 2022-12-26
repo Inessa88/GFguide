@@ -62,13 +62,26 @@ export default function GFMap() {
   //   });
   // },[]);
 
+
+  const mystyle = {
+    width: '12.5vw',
+    height: '6vh',
+    borderRadius: '5px',
+    border: '1px solid gray',
+    backgroundColor: 'transparent',
+    color: '#5A5A5A',
+    fontSize: '16px',
+    paddingLeft: '10px',
+    marginTop: '1vh',
+    marginBottom: '1vh'
+  };
   return (
     <div>
       {/* <div className="sidebar">
         Longitude: {lng} | Latitude: {lat} | Zoom: {zoom} | City: {city}
       </div> */}
         <div>
-          <select name='city' onChange={(e)=>{
+          <select style={mystyle} name='city' onChange={(e)=>{
             let cityData = JSON.parse(e.target.value)
             setCity(cityData['place']);
             setLng(cityData['longitude']);
