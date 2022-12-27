@@ -126,7 +126,7 @@ app.get('/search',(req,res)=>{
   db2('products')
   .select('name','url')
   .join('pictures', 'pictures.id', '=', 'products.main_picture_id')
-  .whereILike('products.name',`${q}%`)
+  .whereILike('products.name',`%${q}%`)
   .then(rows=>{
       if(rows.length ===0){
           return res.status(404).json({msg:'not found'})

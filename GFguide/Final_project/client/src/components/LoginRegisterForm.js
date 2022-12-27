@@ -78,7 +78,7 @@ const LoginRegisterForm = (props) =>{
                 />
 
             </Box>
-            <Button variant='contained' onClick={handleClick}>{props.title}</Button>
+            <Button sx={{ mb: '62vh' }} variant='contained' onClick={handleClick}>{props.title}</Button>
             <div>
                 {msg}
             </div>

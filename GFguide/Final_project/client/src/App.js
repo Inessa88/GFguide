@@ -29,10 +29,10 @@ function App() {
         <Route path='/' element={<Home/>}/>
           <Route path='/login' element={<LoginRegisterForm title='Login'/>}/>
           <Route path='/register' element={<LoginRegisterForm title='Register'/>}/>
-          <Route path='/products' element={<Products/>}/>
-          <Route path='/upload' element={<AddProductForm/>}/>
-          <Route path='/map' element={<GFMap/>}/>
-          <Route path='/info' element={<Information/>}/>
+          <Route path='/products' element={<Auth><Products/></Auth>}/>
+          <Route path='/upload' element={<Auth><AddProductForm/></Auth>}/>
+          <Route path='/map' element={<Auth><GFMap/></Auth>}/>
+          {/* <Route path='/info' element={<Information/>}/> */}
           {/* <Route path='/info' element={<Auth><Information/></Auth>}/> */}
         </Routes>
         <Footer/>
