@@ -15,7 +15,11 @@ export const Auth = (props) =>{
         const verify = async() =>{
           
               try{
-                  const response = await axios.get('/token')
+                  const response = await axios.get('/token', {
+                    headers:{
+                        'x-access-token':token
+                    }
+                  });
 
                   console.log(response.data.token);
                   setToken(response.data.token);

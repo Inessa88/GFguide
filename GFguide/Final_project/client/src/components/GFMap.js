@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import { useNavigate } from 'react-router-dom';
 import coordinates from './CityCoordinates.json'
-
+import './GFMap.css';
 
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
@@ -42,7 +42,7 @@ export default function GFMap() {
               draggable: false
               })
             .setLngLat([restaurant.lng, restaurant.lat])
-            .setPopup(new mapboxgl.Popup().setHTML(`<h1>${restaurant.name}</h1><p>${restaurant.address}</p>`))
+            .setPopup(new mapboxgl.Popup().setHTML(`<h5>${restaurant.name}</h5><p>${restaurant.address}</p>`))
             .addTo(map.current);  
           }
           
@@ -53,14 +53,7 @@ export default function GFMap() {
      
   });
 
-  // useEffect(() => {
-  //   if (!map.current) return; // wait for map to initialize
-  //   map.current.on('move', () => {
-  //     setLng(map.current.getCenter().lng.toFixed(4));
-  //     setLat(map.current.getCenter().lat.toFixed(4));
-  //     setZoom(map.current.getZoom().toFixed(2));
-  //   });
-  // },[]);
+
 
 
   const mystyle = {

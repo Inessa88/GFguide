@@ -4,16 +4,21 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import axios from 'axios';
 import {useContext} from 'react';
+import {AppContext} from '../App';
 
 
 
 const Nav = (props) => {
-
+    const {token, setToken} = useContext(AppContext);
     const navigate = useNavigate();
 
     const logout = async()=>{
         try {
-            const response = await axios.delete('/logout');
+            const response = await axios.delete('/logout',{
+                headers:{
+                    'x-access-token':token
+                }
+            });
             if(response.status ===200 || response.status===204){
                 navigate('/login')
             }
